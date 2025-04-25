@@ -21,7 +21,6 @@ class User(db.Model):
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
-    # Relaciones
     posts = relationship('Post', back_populates='author', cascade='all, delete-orphan')
     comments = relationship('Comment', back_populates='author', cascade='all, delete-orphan')
     likes = relationship('Like', back_populates='user', cascade='all, delete-orphan')
@@ -62,7 +61,6 @@ class Post(db.Model):
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
-    # Relaciones
     author = relationship('User', back_populates='posts')
     media = relationship('Media', back_populates='post', cascade='all, delete-orphan')
     comments = relationship('Comment', back_populates='post', cascade='all, delete-orphan')
@@ -89,7 +87,6 @@ class Media(db.Model):
     media_type: Mapped[str] = mapped_column(String(20), nullable=False)  # e.g. "image", "video"
     order: Mapped[int] = mapped_column(Integer, default=0)
 
-    # Relaciones
     post = relationship('Post', back_populates='media')
 
     def serialize(self):
@@ -110,7 +107,6 @@ class Comment(db.Model):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    # Relaciones
     author = relationship('User', back_populates='comments')
     post = relationship('Post', back_populates='comments')
 
@@ -132,7 +128,6 @@ class Like(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    # Relaciones
     user = relationship('User', back_populates='likes')
     post = relationship('Post', back_populates='likes')
 
@@ -153,7 +148,6 @@ class Follow(db.Model):
     followed_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    # Relaciones
     follower = relationship(
         'User',
         foreign_keys=[follower_id],
